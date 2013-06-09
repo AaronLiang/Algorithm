@@ -1,0 +1,73 @@
+http://bloggerplugnplay.blogspot.in/2012/11/construction-of-binary-tree-from.html
+http://leetcode.com/2011/04/construct-binary-tree-from-inorder-and-preorder-postorder-traversal.html
+
+
+----------------------------------------------------------------------
+public class Solution {
+    
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        if (preorder == null || inorder == null || preorder.length == 0 || inorder.length == 0 || preorder.length != inorder.length) return null;
+        return buildTree(preorder,0,preorder.length-1,inorder,0,inorder.length-1);
+        
+    }
+    public TreeNode buildTree(int[] preorder,int preStart, int preEnd, int[] inorder, int inStart, int inEnd) {
+            int preLength = preEnd - preStart + 1;
+            int inLength = inEnd - inStart + 1;
+            if (preLength <= 0 || inLength <= 0 || preLength != inLength) return null;
+            
+            int rootVal = preorder[preStart];
+            TreeNode node = new TreeNode(rootVal);
+            int numLeftCh = findIndex(inorder,inStart,inEnd,rootVal);
+            int numRightCh = inLength - numLeftCh -1;
+            
+            if (numLeftCh > 0) {
+                node.left = buildTree(preorder,preStart+1,preStart+numLeftCh,inorder,inStart,inStart+numLeftCh-1);
+                 
+            }
+            
+            if (numRightCh > 0) {                                
+            node.right = buildTree(preorder,preStart+numLeftCh+1,preEnd,inorder,inStart + numLeftCh+1,inEnd);
+            }
+            return node;
+        
+    }
+    
+    public int findIndex(int[] arr, int arrStart, int arrEnd, int val) {
+        for (int i = arrStart; i <= arrEnd; i++) {
+            if (arr[i] == val) return (i-arrStart);
+        }
+        return -1;
+    }
+}
+
+
+
+------------------------------------------------------------------------
+public class Solution {
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+            if (preorder.length == 0 || inorder.length == 0 || preorder.length != inorder.length) return null;
+            
+            int rootVal = preorder[0];
+            TreeNode node = new TreeNode(rootVal);
+            int numLeftCh = findIndex(inorder,rootVal);
+            int numRightCh = inorder.length - numLeftCh - 1;
+            
+            if (numLeftCh > 0) {
+            node.left = buildTree(Arrays.copyOfRange(preorder,1,numLeftCh+1),
+                                             Arrays.copyOfRange(inorder,0,numLeftCh));
+            }
+            if (numRightCh > 0) {                                
+            node.right = buildTree(Arrays.copyOfRange(preorder,numLeftCh+1,preorder.length),
+                                             Arrays.copyOfRange(inorder,numLeftCh+1,inorder.length));
+            }
+            return node;
+        
+    }
+    
+    public int findIndex(int[] arr, int val) {
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == val) return i;
+        }
+        return -1;
+    }
+}
