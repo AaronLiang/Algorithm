@@ -40,7 +40,7 @@ iterativeInorder(node)
       node = parentStack.pop()
       visit(node)
       node = node.right
-      
+  
       -------------------------
 Post-order[edit]
 postorder(node)
@@ -51,18 +51,23 @@ postorder(node)
   
   -=-----------------------------
 iterativePostorder(node)
-  if node == null then return
-  nodeStack.push(node)
-  prevNode = null
-  while not nodeStack.isEmpty()
-    currNode = nodeStack.peek()
-    if prevNode == null or prevNode.left == currNode or prevNode.right == currNode
-      if currNode.left != null
-        nodeStack.push(currNode.left)
-      else if currNode.right != null
-       e)
-      nodeStack.pop()
-    prevNode = currNode
+ if node == null then return
+ nodeStack.push(node)
+ prevNode = null
+ while not nodeStack.isEmpty()
+   currNode = nodeStack.peek()
+   if prevNode == null or prevNode.left == currNode or prevNode.right ==currNode
+     if currNode.left != null
+       nodeStack.push(currNode.left)
+     else if currNode.right != null
+       nodeStack.push(currNode.right)
+   else if currNode.left == prevNode
+     if currNode.right != null
+       nodeStack.push(currNode.right)
+   else
+     visit(currNode)
+     nodeStack.pop()
+   prevNode = currNode
     
     
     
@@ -72,12 +77,12 @@ iterativePostorder(node)
 Also, listed below is pseudocode for a simple queue based level order traversal, and will require space proportional to the maximum number of nodes at a given depth. This can be as much as the total number of nodes / 2. A more space-efficient approach for this type of traversal can be implemented using an iterative deepening depth-first search.
 
 levelorder(root)
-  q = empty queue
-  q.enqueue(root)
+  q = empty queue (LinkedList)
+  q.add(root)
   while not q.empty do
-    node := q.dequeue()
+    node := q.remove()
     visit(node)
-    if node.left ≠ null
-      q.enqueue(node.left)
-    if node.right ≠ null
-      q.enqueue(node.right)
+    if node.left ? null
+      q.add(node.left)
+    if node.right ? null
+      q.add(node.right)
